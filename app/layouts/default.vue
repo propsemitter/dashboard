@@ -4,11 +4,8 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 const open = ref(false)
 
 const links = [[
-  { label: 'Обзор', icon: 'i-lucide-layout-dashboard', to: '/' },
-  { label: 'Проекты', icon: 'i-lucide-folder-kanban', to: '/projects' },
-  { label: 'Задачи', icon: 'i-lucide-list-checks', to: '/tasks' },
-  { label: 'Команда', icon: 'i-lucide-users', to: '/team' }
-], [{ label: 'Уведомления', icon: 'i-lucide-bell', to: '/notifications' }]] satisfies NavigationMenuItem[][]
+  { label: 'Проекты', icon: 'i-lucide-folder-kanban', to: '/' }
+]] satisfies NavigationMenuItem[][]
 
 const groups = computed(() => [{ id: 'links', label: 'Перейти', items: links.flat() }])
 </script>
@@ -22,7 +19,6 @@ const groups = computed(() => [{ id: 'links', label: 'Перейти', items: li
       <template #default="{ collapsed }">
         <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
         <UNavigationMenu :collapsed="collapsed" :items="links[0]" orientation="vertical" tooltip popover />
-        <UNavigationMenu :collapsed="collapsed" :items="links[1]" orientation="vertical" tooltip class="mt-auto" />
       </template>
       <template #footer="{ collapsed }">
         <UserMenu :collapsed="collapsed" />
