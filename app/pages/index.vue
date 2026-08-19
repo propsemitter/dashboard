@@ -23,7 +23,7 @@ const projects = [
         </div>
         <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           <UCard v-for="project in projects" :key="project.code" class="transition-colors hover:border-primary/50">
-            <NuxtLink :to="`/projects?project=${project.code}`" class="block">
+            <NuxtLink :to="`/projects/${project.code}`" class="block">
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0">
                   <p class="text-xs font-medium uppercase tracking-wider text-primary">{{ project.code }}</p>
