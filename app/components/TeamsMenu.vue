@@ -5,40 +5,29 @@ defineProps<{
   collapsed?: boolean
 }>()
 
-const teams = ref([{
-  label: 'Nuxt',
-  avatar: {
-    src: 'https://github.com/nuxt.png',
-    alt: 'Nuxt'
-  }
+const modules = ref([{
+  label: 'CMS сайта компании',
+  icon: 'i-lucide-panels-top-left',
+  to: '/cms'
 }, {
-  label: 'NuxtHub',
-  avatar: {
-    src: 'https://github.com/nuxt-hub.png',
-    alt: 'NuxtHub'
-  }
+  label: 'HR',
+  icon: 'i-lucide-users-round',
+  to: '/hr'
 }, {
-  label: 'NuxtLabs',
-  avatar: {
-    src: 'https://github.com/nuxtlabs.png',
-    alt: 'NuxtLabs'
-  }
+  label: 'Проекты',
+  icon: 'i-lucide-folder-kanban',
+  to: '/',
+  active: true
 }])
-const selectedTeam = ref(teams.value[0])
+const selectedModule = ref(modules.value[2])
 
 const items = computed<DropdownMenuItem[][]>(() => {
-  return [teams.value.map(team => ({
-    ...team,
+  return [modules.value.map(module => ({
+    ...module,
     onSelect() {
-      selectedTeam.value = team
+      selectedModule.value = module
     }
-  })), [{
-    label: 'Create team',
-    icon: 'i-lucide-circle-plus'
-  }, {
-    label: 'Manage teams',
-    icon: 'i-lucide-cog'
-  }]]
+  }))]
 })
 </script>
 
@@ -50,8 +39,8 @@ const items = computed<DropdownMenuItem[][]>(() => {
   >
     <UButton
       v-bind="{
-        ...selectedTeam,
-        label: collapsed ? undefined : selectedTeam?.label,
+        ...selectedModule,
+        label: collapsed ? undefined : selectedModule?.label,
         trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down'
       }"
       color="neutral"
