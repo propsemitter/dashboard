@@ -22,7 +22,7 @@ const projects = [
           <p class="text-sm text-muted">Рабочие пространства для модулей, сред и артефактов.</p>
         </div>
         <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          <UCard v-for="project in projects" :key="project.code" class="transition-colors hover:border-primary/50">
+          <UCard v-for="project in projects" :key="project.code" variant="subtle" class="transition-colors hover:border-primary/50">
             <NuxtLink :to="`/projects/${project.code}`" class="block">
               <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0">
@@ -31,13 +31,13 @@ const projects = [
                 </div>
                 <UBadge :color="project.color as any" variant="subtle" size="sm">{{ project.status }}</UBadge>
               </div>
-              <p class="mt-3 line-clamp-2 text-sm leading-5 text-muted">{{ project.description }}</p>
-              <div class="mt-5 grid grid-cols-3 gap-2 border-t border-default pt-4 text-xs">
-                <div><p class="text-muted">Модули</p><p class="mt-1 font-medium text-highlighted">{{ project.modules }}</p></div>
-                <div><p class="text-muted">Среды</p><p class="mt-1 font-medium text-highlighted">{{ project.environments }}</p></div>
-                <div><p class="text-muted">Артефакты</p><p class="mt-1 font-medium text-highlighted">{{ project.artifacts }}</p></div>
+              <div class="mt-4 flex items-center gap-3 border-t border-default pt-3 text-xs text-muted">
+                <span>{{ project.modules }} модулей</span>
+                <span class="text-dimmed">·</span>
+                <span>{{ project.environments }} среды</span>
+                <span class="text-dimmed">·</span>
+                <span>{{ project.artifacts }} ссылок</span>
               </div>
-              <p class="mt-4 text-xs text-dimmed">{{ project.updated }}</p>
             </NuxtLink>
           </UCard>
         </div>
