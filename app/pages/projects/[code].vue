@@ -3,9 +3,10 @@ const route = useRoute()
 const code = String(route.params.code)
 const activeTab = ref('about')
 
-const projects: Record<string, { name: string; description: string; status: string; owner: string; updated: string; modules: string[]; environments: { name: string; detail: string; status: string }[]; artifacts: { name: string; type: string; url: string }[] }> = {
+const projects: Record<string, { name: string; description: string; status: string; updated: string; team: { name: string; role: string; initials: string }[]; modules: string[]; environments: { name: string; detail: string; status: string }[]; artifacts: { name: string; type: string; url: string }[] }> = {
   'MOB-24': {
-    name: 'Мобильное приложение', description: 'Клиентское приложение для пользователей сервиса.', status: 'В работе', owner: 'Продуктовая команда', updated: 'Сегодня, 10:42',
+    name: 'Мобильное приложение', description: 'Клиентское приложение для пользователей сервиса.', status: 'В работе', updated: 'Сегодня, 10:42',
+    team: [{ name: 'Анна Петрова', role: 'Product Manager', initials: 'АП' }, { name: 'Иван Соколов', role: 'Lead Developer', initials: 'ИС' }, { name: 'Мария Волкова', role: 'UX/UI Designer', initials: 'МВ' }],
     modules: ['Авторизация', 'Профиль пользователя', 'Каталог', 'Уведомления', 'Платежи', 'Поддержка'],
     environments: [{ name: 'Production', detail: 'app.example.com', status: 'Стабильна' }, { name: 'Staging', detail: 'staging.app.example.com', status: 'Готова' }, { name: 'Development', detail: 'Локальная среда', status: 'Активна' }],
     artifacts: [{ name: 'Техническая документация', type: 'Документация', url: 'docs.example.com/mobile' }, { name: 'Макеты приложения', type: 'Figma', url: 'figma.com/file/mobile-app' }, { name: 'API контракт', type: 'OpenAPI', url: 'api.example.com/openapi' }]
@@ -13,7 +14,7 @@ const projects: Record<string, { name: string; description: string; status: stri
 }
 
 const project = computed(() => projects[code] ?? projects['MOB-24'])
-const tabs = [{ value: 'about', label: 'О проекте', icon: 'i-lucide-layout-dashboard' }, { value: 'modules', label: 'Модули', icon: 'i-lucide-box' }, { value: 'environments', label: 'Среды', icon: 'i-lucide-server' }, { value: 'artifacts', label: 'Артефакты', icon: 'i-lucide-link-2' }]
+const tabs = [{ value: 'about', label: 'Проект', icon: 'i-lucide-layout-dashboard' }, { value: 'modules', label: 'Модули', icon: 'i-lucide-box' }, { value: 'environments', label: 'Среды', icon: 'i-lucide-server' }, { value: 'artifacts', label: 'Артефакты', icon: 'i-lucide-link-2' }]
 </script>
 
 <template>
@@ -35,11 +36,17 @@ const tabs = [{ value: 'about', label: 'О проекте', icon: 'i-lucide-layo
           <button v-for="tab in tabs" :key="tab.value" type="button" role="tab" :aria-selected="activeTab === tab.value" class="flex shrink-0 items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors" :class="activeTab === tab.value ? 'border-primary text-highlighted' : 'border-transparent text-muted hover:text-highlighted'" @click="activeTab = tab.value"><UIcon :name="tab.icon" class="size-4" />{{ tab.label }}</button>
         </div>
 
-        <section v-if="activeTab === 'about'" class="grid gap-4 md:grid-cols-3" role="tabpanel">
-          <UCard variant="subtle"><p class="text-sm text-muted">Статус</p><p class="mt-2 font-semibold text-highlighted">{{ project.status }}</p></UCard>
-          <UCard variant="subtle"><p class="text-sm text-muted">Владелец</p><p class="mt-2 font-semibold text-highlighted">{{ project.owner }}</p></UCard>
-          <UCard variant="subtle"><p class="text-sm text-muted">Последнее изменение</p><p class="mt-2 font-semibold text-highlighted">{{ project.updated }}</p></UCard>
-          <UCard class="md:col-span-3"><div class="flex items-center gap-3"><div class="flex size-10 items-center justify-center rounded-lg bg-elevated"><UIcon name="i-lucide-info" class="size-5 text-primary" /></div><div><h2 class="font-semibold text-highlighted">Быстрая информация</h2><p class="mt-1 text-sm text-muted">В проекте {{ project.modules.length }} модулей, {{ project.environments.length }} среды и {{ project.artifacts.length }} артефакта.</p></div></div></UCard>
+        <section v-if="activeTab === 'about'" class="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]" role="tabpanel">
+          <UCard variant="subtle" class="h-fit">
+            <div class="flex items-start justify-between gap-4">
+              <div><p class="text-sm text-muted">Статус проекта</p><p class="mt-2 text-lg font-semibold text-highlighted">{{ project.status }}</p><p class="mt-1 text-xs text-muted">Обновлено {{ project.updated.toLowerCase() }}</p></div>
+              <span class="flex size-10 items-center justify-center rounded-full bg-success/10"><UIcon name="i-lucide-activity" class="size-5 text-success" /></span>
+            </div>
+          </UCard>
+          <UCard variant="subtle">
+            <div class="flex items-center justify-between gap-4"><div><h2 class="font-semibold text-highlighted">Команда проекта</h2><p class="mt-1 text-sm text-muted">Участники, которых можно назначать на модули</p></div><UButton icon="i-lucide-user-plus" label="Изменить" variant="soft" size="sm" /></div>
+            <div class="mt-5 divide-y divide-default"><div v-for="member in project.team" :key="member.name" class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"><div class="flex items-center gap-3"><UAvatar :text="member.initials" size="sm" color="neutral" /><div><p class="text-sm font-medium text-highlighted">{{ member.name }}</p><p class="mt-1 text-xs text-muted">{{ member.role }}</p></div></div><UButton icon="i-lucide-more-horizontal" color="neutral" variant="ghost" square size="sm" aria-label="Действия участника" /></div></div>
+          </UCard>
         </section>
 
         <section v-else-if="activeTab === 'modules'" role="tabpanel"><UCard variant="subtle"><div class="flex items-center justify-between"><div><h2 class="font-semibold text-highlighted">Модули проекта</h2><p class="mt-1 text-sm text-muted">Основные части проекта</p></div><UButton icon="i-lucide-plus" label="Добавить модуль" variant="soft" /></div><div class="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"><div v-for="module in project.modules" :key="module" class="flex items-center gap-3 rounded-lg border border-default px-3 py-3"><UIcon name="i-lucide-box" class="size-4 text-primary" /><span class="text-sm text-highlighted">{{ module }}</span></div></div></UCard></section>
